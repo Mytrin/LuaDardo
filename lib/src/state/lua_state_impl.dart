@@ -1022,7 +1022,7 @@ class LuaStateImpl implements LuaState, LuaVM {
   }
 
   @override
-  void openLibs() {
+  void openLibs([List<String> ignoredLibs = const []]) {
     Map<String, DartFunction> libs = <String, DartFunction>{
       "_G": BasicLib.openBaseLib,
       "package": PackageLib.openPackageLib,
@@ -1031,6 +1031,8 @@ class LuaStateImpl implements LuaState, LuaVM {
       "math": MathLib.openMathLib,
       "os": OSLib.openOSLib
     };
+
+    libs.removeWhere((name, fun) => ignoredLibs.contains(name));
 
     libs.forEach((name, fun) {
       requireF(name, fun, true);
