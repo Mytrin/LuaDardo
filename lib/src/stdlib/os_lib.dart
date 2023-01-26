@@ -1,8 +1,13 @@
 import 'dart:io';
 
+import 'package:uuid/uuid.dart';
+
 import '../../lua.dart';
 
 class OSLib {
+
+  static const Uuid _uuid = Uuid();
+
   static const Map<String, DartFunction> _sysFuncs = {
     "clock": _osClock,
     "difftime": _osDiffTime,
@@ -177,7 +182,17 @@ class OSLib {
 // os.tmpname ()
 // http://www.lua.org/manual/5.3/manual.html#pdf-os.tmpname
   static int _osTmpName(LuaState ls) {
-    throw ("todo: osTmpName!");
+    try {
+      Directory dir = Directory.systemTemp.createTempSync();
+      String fileName = _uuid.v4();
+      File file = File("${dir.path}/$fileName")..createSync();
+      ls.pushString(file.path);
+      return 1;
+    } catch (e) {
+      ls.pushNil();
+      ls.pushString(e.toString());
+      return 2;
+    }
   }
 
 // os.getenv (varname)

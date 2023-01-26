@@ -2,8 +2,8 @@ import 'package:lua_dardo/lua.dart';
 import 'package:test/test.dart';
 
 
-bool testOS(){
-  try{
+bool testOS() {
+  try {
     LuaState state = LuaState.newState();
     state.openLibs();
     state.loadString(r'''
@@ -15,9 +15,11 @@ for i = 1, 100000 do
 end
 
 print('sec:'..(os.clock()-start)) 
+
+print(os.tmpname())
 ''');
     state.pCall(0, 0, 1);
-  }catch(e,s){
+  } catch(e,s) {
     print('$e\n$s');
     return false;
   }
