@@ -8,14 +8,13 @@ enum ClosureType {
   dart
 }
 
-abstract class Closure<T> {
+abstract class Closure {
 
   final Prototype proto;
   final List<UpvalueHolder?> upvals;
 
   Closure(this.proto, this.upvals);
 
-  T get body;
   ClosureType get type;
 
   int get nRegs => 0;
@@ -27,7 +26,7 @@ abstract class Closure<T> {
 
 }
 
-class LuaClosure extends Closure<Prototype> {
+class LuaClosure extends Closure {
 
   LuaClosure(Prototype proto) : super(proto, List.filled(proto.upvalues.length, null));
 
@@ -40,13 +39,12 @@ class LuaClosure extends Closure<Prototype> {
 
 }
 
-class DartClosure extends Closure<DartFunction?> {
+class DartClosure extends Closure {
 
   final DartFunction? dartFunc;
 
   DartClosure(this.dartFunc, int nUpvals) : super(Prototype(), List.filled(nUpvals, null));
 
-  DartFunction? get body => dartFunc;
   ClosureType get type => ClosureType.dart;
 
   int execute(LuaState state) => dartFunc?.call(state) ?? -1;

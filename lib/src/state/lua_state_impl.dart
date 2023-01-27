@@ -653,7 +653,7 @@ class LuaStateImpl implements LuaState, LuaVM {
   @override
   bool isDartFunction(int idx) {
     Object? val = _stack!.get(idx);
-    return val is Closure && val.body != null;
+    return val is DartClosure && val.dartFunc != null;
   }
 
   @override
@@ -664,7 +664,7 @@ class LuaStateImpl implements LuaState, LuaVM {
   @override
   toDartFunction(int idx) {
     Object? val = _stack!.get(idx);
-    return val is DartClosure ? val.body : null;
+    return val is DartClosure ? val.dartFunc : null;
   }
 
   @override
